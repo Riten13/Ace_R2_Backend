@@ -28,8 +28,8 @@ Before you begin, ensure you have:
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/roshith-prakash/express-template.git
+   cd express-template
    ```
 
 2. **Install Dependencies**:

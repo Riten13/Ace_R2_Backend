@@ -1,1 +1,115 @@
-Add the information about your project in this README file.
+# Express Server Template
+
+This project provides a basic setup for an Express.js server with common configurations and middleware. It serves as a starting point for building robust and secure APIs.
+
+---
+
+## Features
+
+- **Environment Variables**: Managed using `dotenv`.
+- **CORS Configuration**: Restricts access to specific domains.
+- **Request Parsing**: Supports URL-encoded and JSON request bodies.
+- **Security Enhancements**: Includes HTTP headers using `helmet`.
+- **Routing**: Organized route handling with `/api/v1`.
+- **Modularity**: Encourages separation of concerns for scalability.
+
+---
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- [Node.js](https://nodejs.org/) installed.
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) installed.
+
+---
+
+## Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set Up Environment Variables**:
+   Create a `.env` file in the root directory and define the following:
+   ```env
+   PORT=3000
+   ```
+
+---
+
+## Usage
+
+### Run the Server
+Start the server with:
+```bash
+npm start
+```
+The server will run on the port specified in the `.env` file.
+
+### Verify Setup
+Visit `http://localhost:<PORT>` in your browser or use an API client (e.g., Postman) to see:
+```
+We are good to go!
+```
+
+---
+
+## Project Structure
+
+```plaintext
+├── controllers/
+│   └── index.js        # Main controller file
+├── routes/
+│   └── index.js        # Main route file
+├── .env                # Environment variables
+├── index.js            # Entry point of the server
+├── package.json        # Project dependencies and scripts
+└── README.md           # Documentation
+```
+
+---
+
+## Middleware
+
+1. **Body Parsing**:
+   - `express.urlencoded`: Parses URL-encoded bodies.
+   - `express.json`: Parses JSON payloads.
+
+2. **CORS**:
+   Configured to allow requests only from the whitelisted domains:
+   ```javascript
+   const whitelist = ['http://localhost:3000']
+   ```
+
+3. **Helmet**:
+   Secures HTTP headers.
+
+---
+
+## Routes
+
+### Default Route
+- **Endpoint**: `/`
+- **Method**: GET
+- **Response**: `We are good to go!`
+
+### API Routes
+All application-specific routes are prefixed with `/api/v1`.
+
+---
+
+## Customization
+
+- **Whitelist Domains**:
+  Update the `whitelist` array in `index.js` to include other allowed origins.
+
+- **Add Routes**:
+  Define additional routes in the `routes` directory and integrate them into `index.js`.

@@ -12,6 +12,7 @@ This project provides a basic setup for an Express.js server with common configu
 - **Security Enhancements**: Includes HTTP headers using `helmet`.
 - **Routing**: Organized route handling with `/api/v1`.
 - **Modularity**: Encourages separation of concerns for scalability.
+- **TypeScript**: Added typescript for type safety.
 
 ---
 
@@ -40,7 +41,7 @@ Before you begin, ensure you have:
 3. **Set Up Environment Variables**:
    Create a `.env` file in the root directory and define the following:
    ```env
-   PORT=3000
+   PORT=4000
    ```
 
 ---
@@ -48,9 +49,9 @@ Before you begin, ensure you have:
 ## Usage
 
 ### Run the Server
-Start the server with:
+Build & run the server with:
 ```bash
-npm start
+npm run build; npm run server
 ```
 The server will run on the port specified in the `.env` file.
 
@@ -66,11 +67,11 @@ We are good to go!
 
 ```plaintext
 ├── controllers/
-│   └── index.js        # Main controller file
+│   └── index.ts        # Main controller file
 ├── routes/
-│   └── index.js        # Main route file
+│   └── index.ts        # Main route file
 ├── .env                # Environment variables
-├── index.js            # Entry point of the server
+├── index.ts            # Entry point of the server
 ├── package.json        # Project dependencies and scripts
 └── README.md           # Documentation
 ```

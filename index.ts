@@ -3,6 +3,8 @@ import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors, { CorsOptions } from "cors";
+import { Request, Response } from "express";
+import rateLimit from "express-rate-limit";
 dotenv.config();
 
 // Importing Routes ----------------------------------------------------------------------------------------------
@@ -36,6 +38,13 @@ const corsOptions: CorsOptions = {
   },
 };
 
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 50, // Limit each IP to 50 requests per minute
+});
+
+// Rate Limit
+app.use(limiter);
 // Parses request body.
 app.use(express.urlencoded({ extended: true }));
 // Parses JSON passed inside body.
@@ -44,11 +53,13 @@ app.use(express.json());
 app.use(cors(corsOptions));
 // Add security to server.
 app.use(helmet());
+// Removes the "X-Powered-By" HTTP header from Express responses.
+app.disable("x-powered-by");
 
 // Routes -------------------------------------------------------------------------------------------
 
 // Default route to check if server is working.
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.status(200).send("We are good to go!");
 });
 

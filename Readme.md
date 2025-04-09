@@ -1,116 +1,157 @@
-# Express Server Template
+# ⚙️ Express + TypeScript Template
 
-This project provides a basic setup for an Express.js server with common configurations and middleware. It serves as a starting point for building robust and secure APIs.
-
----
-
-## Features
-
-- **Environment Variables**: Managed using `dotenv`.
-- **CORS Configuration**: Restricts access to specific domains.
-- **Request Parsing**: Supports URL-encoded and JSON request bodies.
-- **Security Enhancements**: Includes HTTP headers using `helmet`.
-- **Routing**: Organized route handling with `/api/v1`.
-- **Modularity**: Encourages separation of concerns for scalability.
-- **TypeScript**: Added typescript for type safety.
+A clean and modular Express.js server boilerplate built with TypeScript. Designed for scalability, maintainability, and rapid API development.
 
 ---
 
-## Prerequisites
+## 🚀 Features
 
-Before you begin, ensure you have:
-
-- [Node.js](https://nodejs.org/) installed.
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) installed.
+- 🛠 **TypeScript** for type safety and better DX.
+- 🔐 **Helmet** for securing HTTP headers.
+- 🌐 **CORS** with a customizable whitelist.
+- ⚙️ **Middleware** structure for scalability.
+- 📁 **Modular File Organization**.
+- 🧩 **Environment Config** with `dotenv`.
+- 📦 **Scripted Dev & Build Workflows**.
 
 ---
 
-## Installation
+## 📦 Prerequisites
+
+Ensure you have the following installed:
+
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+---
+
+## ⚙️ Installation
 
 1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/roshith-prakash/express-template.git
-   cd express-template
-   ```
+
+```bash
+git clone https://github.com/roshith-prakash/express-template.git
+cd express-template
+```
 
 2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
+
+```bash
+npm install
+```
 
 3. **Set Up Environment Variables**:
-   Create a `.env` file in the root directory and define the following:
-   ```env
-   PORT=4000
-   ```
+
+Create a `.env` file in the root directory and define:
+
+```env
+PORT=4000
+```
 
 ---
 
-## Usage
+## 🧪 Usage
+
+### Development Workflow
+
+Use the following during development:
+
+```bash
+npm run devCompiler   # Compiles TypeScript in watch mode
+npm run dev           # Runs the compiled server using nodemon
+```
+
+> 💡 Run `devCompiler` and `dev` in **two separate terminals** for a full development experience.
+
+### Build the Project
+
+Compile TypeScript to JavaScript:
+
+```bash
+npm run build
+```
 
 ### Run the Server
-Build & run the server with:
+
+Start the compiled server:
+
 ```bash
-npm run build; npm run server
-```
-The server will run on the port specified in the `.env` file.
-
-### Verify Setup
-Visit `http://localhost:<PORT>` in your browser or use an API client (e.g., Postman) to see:
-```
-We are good to go!
+npm run server
 ```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
-```plaintext
-├── controllers/
-│   └── index.ts        # Main controller file
-├── routes/
-│   └── index.ts        # Main route file
-├── .env                # Environment variables
-├── index.ts            # Entry point of the server
-├── package.json        # Project dependencies and scripts
-└── README.md           # Documentation
+```
+src/
+│
+├── constants/     # Constant values
+├── controllers/   # Route handler logic
+├── functions/     # Helper functions / reusable logic
+├── middleware/    # Express middleware (e.g., error handling, auth)
+├── routes/        # API route definitions
+├── types/         # Custom TypeScript types and interfaces
+├── utils/         # Utility functions (e.g., validators, formatters)
+│
+├── index.ts       # Main server entry point
 ```
 
 ---
 
-## Middleware
+## 🔧 Middleware Stack
 
-1. **Body Parsing**:
-   - `express.urlencoded`: Parses URL-encoded bodies.
-   - `express.json`: Parses JSON payloads.
-
-2. **CORS**:
-   Configured to allow requests only from the whitelisted domains:
-   ```javascript
-   const whitelist = ['http://localhost:3000']
-   ```
-
-3. **Helmet**:
-   Secures HTTP headers.
+- **Helmet** – Adds security-enhancing HTTP headers
+- **CORS** – Restricts requests to whitelisted domains
+  ```ts
+  const whitelist = ["http://localhost:3000"];
+  ```
+- **Body Parsing** –
+  - `express.json()` for JSON payloads
+  - `express.urlencoded({ extended: true })` for form submissions
 
 ---
 
-## Routes
+## 🌐 Routes
 
 ### Default Route
+
 - **Endpoint**: `/`
-- **Method**: GET
-- **Response**: `We are good to go!`
+- **Method**: `GET`
+- **Response**:
+  ```
+  We are good to go!
+  ```
 
 ### API Routes
-All application-specific routes are prefixed with `/api/v1`.
+
+- Prefixed with `/api/v1`
+- Defined in `routes/` and handled by corresponding `controllers/`
 
 ---
 
-## Customization
+## 🔧 Customization
 
-- **Whitelist Domains**:
-  Update the `whitelist` array in `index.js` to include other allowed origins.
+- **Whitelist Domains**  
+  Update the `whitelist` array in the CORS configuration in `index.ts`.
 
-- **Add Routes**:
-  Define additional routes in the `routes` directory and integrate them into `index.js`.
+- **Add Routes**  
+  Create a new route file in `routes/`, define your controller in `controllers/`, and register it in the main route file.
+
+- **Add Middleware**  
+  Drop middleware into the `middleware/` folder and wire it up in `index.ts`.
+
+---
+
+## 📜 Scripts
+
+```json
+"scripts": {
+  "build": "npx tsc",
+  "devCompiler": "npx tsc --watch",
+  "dev": "nodemon dist/index.js",
+  "server": "node dist/index.js"
+}
+```
+
+---

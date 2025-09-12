@@ -5,6 +5,7 @@ import {
   getUserProfile,
   updateUser,
   deleteUser,
+  getStreak,
 } from "../controllers/user.controller.ts";
 import { Router } from "express";
 
@@ -34,6 +35,8 @@ router.post("/update-user", upload.single("file"), updateUser);
 
 // Delete the user data from the database.
 router.post("/delete-user", deleteUser);
+
+router.post("/get-streak", getStreak);
 
 // ---------------------------------------------------------------------
 

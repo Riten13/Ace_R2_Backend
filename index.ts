@@ -13,6 +13,9 @@ import userRouter from "./routes/user.routes.ts";
 import eqRouter from "./routes/eq.routes.ts";
 import noteRouter from "./routes/note.routes.ts";
 
+import { getHighEQUsers } from "./controllers/getHighEQUsers.ts";
+import { createOrGetChat } from "./controllers/chat.controller.ts";
+
 // Initializing Server -------------------------------------------------------------------------------------------
 
 const app = express();
@@ -73,6 +76,12 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/eq", eqRouter);
 // Note Routes
 app.use("/api/v1/note", noteRouter);
+
+//EQ high level route
+app.get("/api/users/high-eq", getHighEQUsers);
+
+// EQ Routes
+app.post("/api/abc/chat", createOrGetChat);
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 

@@ -1,6 +1,7 @@
 import { prisma } from "../utils/primsaClient.ts";
 import { Request, Response } from "express";
 import axios from "axios";
+import { ActivityType } from "@prisma/client";
 
 // Update the EQ details of the user in the database.
 export const addEQ = async (req: Request, res: Response): Promise<void> => {
@@ -236,7 +237,49 @@ export const addMood = async (req: Request, res: Response) => {
       },
     });
 
+    await prisma.activity.create({
+      data: {
+        type: ActivityType.CHECKIN,
+        userId: user.id,
+        metadata: { mood: mood, moodValue: moodValue },
+      },
+    });
+
     res.status(200).send({ mood: newMood });
+    return;
+  } catch (error) {
+    res.status(500).send({ data: "Something went wrong." });
+    return;
+  }
+};
+
+// Add mood entry for the user. (for specific day)
+export const trackActivity = async (req: Request, res: Response) => {
+  try {
+    const firebaseUID = req.body?.firebaseUID;
+    const title = req?.body?.title;
+    const description = req?.body?.description;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        firebaseUID: firebaseUID,
+      },
+    });
+
+    if (!user) {
+      res.status(404).send({ data: "User not found." });
+      return;
+    }
+
+    await prisma.activity.create({
+      data: {
+        type: ActivityType.GAME,
+        userId: user.id,
+        metadata: { title: title, description: description },
+      },
+    });
+
+    res.status(200).send({ data: "OK" });
     return;
   } catch (error) {
     res.status(500).send({ data: "Something went wrong." });

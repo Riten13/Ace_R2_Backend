@@ -272,3 +272,52 @@ export const deleteUser = async (
     res.status(500).send({ data: "Something went wrong." });
   }
 };
+
+export const getStreak = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const firebaseUID = req?.body?.firebaseUID;
+    const user = await prisma.user.findUnique({
+      where: { firebaseUID },
+    });
+
+    if (!user) {
+      res.status(404).send({ data: "User not found." });
+      return;
+    }
+
+    const activities = await prisma.activity.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: "desc" },
+      select: { createdAt: true },
+    });
+
+    const days = [
+      ...new Set(
+        activities.map((a) => a.createdAt.toISOString().split("T")[0])
+      ),
+    ];
+
+    function calcStreak(days: string[]): number {
+      let streak = 0;
+      let current = new Date();
+      for (;;) {
+        const key = current.toISOString().split("T")[0];
+        if (days.includes(key)) {
+          streak++;
+          current.setDate(current.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+      return streak;
+    }
+
+    const streak = calcStreak(days);
+
+    res.status(200).send({ streak });
+    return;
+  } catch (err) {
+    console.error("Error deleting user:", err);
+    res.status(500).send({ data: "Something went wrong." });
+  }
+};

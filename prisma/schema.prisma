@@ -22,27 +22,28 @@ enum Role {
 
 // Schema for user
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
   // UID received from firebase
-  firebaseUID  String   @unique
+  firebaseUID  String     @unique
   // Name of the user
   name         String?
   // User's Email address
-  email        String   @unique
+  email        String     @unique
   // User's Display picture link
-  photoURL     String?  @default("")
+  photoURL     String?    @default("")
   // User's role within the system
-  role         Role     @default(USER)
+  role         Role       @default(USER)
   // 1-10 : 1 being the lowest, 10 being the highest
-  avgSentiment Int      @default(0)
+  avgSentiment Int        @default(0)
   // EQ Score and Level (Out of 100 - High, Above Average, Average, Needs Improvement)
-  eqScore      Int      @default(0)
-  eqLevel      String   @default("")
+  eqScore      Int        @default(0)
+  eqLevel      String     @default("")
   // Created & updated times
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
   Mood         Mood[]
   Note         Note[]
+  Activity     Activity[]
 }
 
 model Mood {
@@ -64,7 +65,7 @@ model Note {
   content   String?
   // Title of the string
   title     String?
-  // Is note public?
+  // Is notQe public?
   isPublic  Boolean  @default(false)
   // User to which the file belongs
   user      User     @relation(fields: [userId], references: [id])
@@ -72,4 +73,50 @@ model Note {
   // Created & updated times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum ActivityType {
+  JOURNAL
+  MEDITATION
+  BREATHING
+  GAME
+  SESSION // e.g. 1:1 session with counsellor
+  CHALLENGE // community challenge activity
+  CHECKIN // daily check-in / mood report
+  RESOURCE_VIEW // user opened a resource
+  OTHER
+}
+
+model Activity {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String       @db.ObjectId
+  user      User         @relation(fields: [userId], references: [id])
+  type      ActivityType
+  // flexible payload for details: journalId, gameId, technique, steps, score etc.
+  metadata  Json?
+  // duration in seconds where applicable (meditation, game play, session length)
+  duration  Int?         @default(0)
+  // optional numeric outcome (score, streakCount, mood change, etc.)
+  value     Int?
+  // whether the activity completed successfully (e.g., completed meditation)
+  success   Boolean?     @default(true)
+  createdAt DateTime     @default(now())
+
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
+}
+
+model Chat {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  user     String
+  receiver String
+  messages Message[]
+}
+
+model Message {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  chatId  String
+  userId  String
+  message String
+  chat    Chat   @relation(fields: [chatId], references: [id])
 }

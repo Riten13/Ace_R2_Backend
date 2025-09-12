@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "../utils/primsaClient.ts";
 import { v4 as uuidv4 } from "uuid";
 import { htmlToText } from "html-to-text";
+import { ActivityType } from "@prisma/client";
 
 // Creates a blank note
 export const createNewNote = async (
@@ -34,6 +35,14 @@ export const createNewNote = async (
         title: "Blank Note",
         noteId,
         userId: user.id,
+      },
+    });
+
+    await prisma.activity.create({
+      data: {
+        type: ActivityType.JOURNAL,
+        userId: user.id,
+        metadata: { noteId: note.noteId },
       },
     });
 

@@ -3,6 +3,7 @@ import {
   addMood,
   chatWithAI,
   checkIfMoodAddedToday,
+  trackActivity,
 } from "../controllers/eq.controller.ts";
 import { Router } from "express";
 
@@ -28,6 +29,9 @@ router.post("/check-if-mood-exists", checkIfMoodAddedToday);
 
 // Add Mood for today
 router.post("/add-mood", addMood);
+
+// Add Mood for today
+router.post("/track-activity", trackActivity);
 
 // ---------------------------------------------------------------------
 

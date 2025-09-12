@@ -22,18 +22,23 @@ enum Role {
 
 // Schema for user
 model User {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   // UID received from firebase
-  firebaseUID String   @unique
+  firebaseUID  String   @unique
   // Name of the user
-  name        String?
+  name         String?
   // User's Email address
-  email       String   @unique
+  email        String   @unique
   // User's Display picture link
-  photoURL    String?  @default("")
+  photoURL     String?  @default("")
   // User's role within the system
-  role        Role     @default(USER)
+  role         Role     @default(USER)
+  // 1-10 : 1 being the lowest, 10 being the highest
+  avgSentiment Int      @default(0)
+  // EQ Score and Level (Out of 100 - High, Above Average, Average, Needs Improvement)
+  eqScore      Int      @default(0)
+  eqLevel      String   @default("")
   // Created & updated times
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

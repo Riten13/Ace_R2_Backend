@@ -74,6 +74,11 @@ export const chatWithAI = async (
       history?: { role: "user" | "model"; text: string }[];
     };
 
+    const user = await prisma.user.findUnique({
+      where: { firebaseUID },
+      select: { eqLevel: true, avgSentiment: true, name: true },
+    });
+
     if (!message) {
       res.status(400).json({ reply: "Message is required.", sentiment: 5 });
       return;
@@ -84,11 +89,13 @@ export const chatWithAI = async (
       parts: [
         {
           text: `You are an **emotional wellness coach**.
+
+          This is the user's information : ${JSON.stringify(user)}
                   Your role:
                   - Analyze the user's emotions and mental state.
                   - Respond with empathy, kindness, and encouragement.
                   - Guide them gently toward positive reflection and healthy coping strategies.
-                  - Keep replies short, supportive, and conversational (3–5 sentences).
+                 -- Keep replies short, supportive, and conversational (3-5 sentences).
                   
                   ⚠️ Important:
                   Always respond ONLY in **valid JSON** with exactly two keys:
@@ -128,9 +135,6 @@ export const chatWithAI = async (
       response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       '{"reply":"Sorry, I didn’t quite get that.","sentiment":5}';
 
-    // console.log("Raw model reply:", response);
-    // console.log("Parsed response:", parsed);
-
     console.log(rawReply);
 
     // Safely parse JSON
@@ -145,11 +149,6 @@ export const chatWithAI = async (
       parsed = { reply: rawReply, sentiment: 5 };
     }
 
-    // Optional: Update avgSentiment in DB
-    const user = await prisma.user.findUnique({
-      where: { firebaseUID },
-      select: { avgSentiment: true },
-    });
     const newAvgSentiment = (user?.avgSentiment || 5 + parsed.sentiment) / 2;
 
     await prisma.user.update({

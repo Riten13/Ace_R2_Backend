@@ -11,6 +11,7 @@ dotenv.config();
 
 import userRouter from "./routes/user.routes.ts";
 import eqRouter from "./routes/eq.routes.ts";
+import noteRouter from "./routes/note.routes.ts";
 
 // Initializing Server -------------------------------------------------------------------------------------------
 
@@ -70,6 +71,8 @@ app.get("/api/v1", (req: Request, res: Response) => {
 app.use("/api/v1/user", userRouter);
 // EQ Routes
 app.use("/api/v1/eq", eqRouter);
+// Note Routes
+app.use("/api/v1/note", noteRouter);
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 

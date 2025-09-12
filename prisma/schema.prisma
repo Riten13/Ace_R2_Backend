@@ -41,4 +41,15 @@ model User {
   // Created & updated times
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  Mood         Mood[]
+}
+
+model Mood {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  // Reference to User model
+  user      User     @relation(fields: [userId], references: [id])
+  mood      String   @default("😐")
+  moodValue Int      @default(0)
+  createdAt DateTime @default(now())
 }

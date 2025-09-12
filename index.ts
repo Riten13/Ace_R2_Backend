@@ -10,6 +10,7 @@ dotenv.config();
 // Importing Routes ----------------------------------------------------------------------------------------------
 
 import userRouter from "./routes/user.routes.ts";
+import eqRouter from "./routes/eq.routes.ts";
 
 // Initializing Server -------------------------------------------------------------------------------------------
 
@@ -59,7 +60,7 @@ app.disable("x-powered-by");
 // Routes -------------------------------------------------------------------------------------------
 
 // Default route to check if server is working.
-app.get("/", (req: Request, res: Response) => {
+app.get("/api/v1", (req: Request, res: Response) => {
   res.status(200).send("We are good to go!");
 });
 
@@ -67,6 +68,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // Auth Routes
 app.use("/api/v1/user", userRouter);
+// EQ Routes
+app.use("/api/v1/eq", eqRouter);
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 

@@ -28,6 +28,6 @@
     /* Interop Constraints */
     "isolatedModules": true, /* Ensure each file can be safely transpiled */
   },
-  "include": ["*"], /* Include all TypeScript files in the src folder */
+  "include": ["*", "types/utils"], /* Include all TypeScript files in the src folder */
   "exclude": ["node_modules", "dist", "**/*.test.ts"] /* Exclude test files and output folder */
 }

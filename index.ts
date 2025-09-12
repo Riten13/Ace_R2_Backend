@@ -9,7 +9,7 @@ dotenv.config();
 
 // Importing Routes ----------------------------------------------------------------------------------------------
 
-import routes from "./routes/index.ts";
+import userRouter from "./routes/user.routes.ts";
 
 // Initializing Server -------------------------------------------------------------------------------------------
 
@@ -65,7 +65,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // Routes -----------------------------------------------------------------------------------------
 
-app.use("/api/v1", routes);
+// Auth Routes
+app.use("/api/v1/user", userRouter);
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 

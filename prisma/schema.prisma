@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -14,10 +13,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  MENTOR
+  COUNSELLOR
+  WELLNESS_COORDINATOR
+}
+
+// Schema for user
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  // UID received from firebase
+  firebaseUID String   @unique
+  // Name of the user
+  name        String?
+  // User's Email address
+  email       String   @unique
+  // User's Display picture link
+  photoURL    String?  @default("")
+  // User's role within the system
+  role        Role     @default(USER)
+  // Created & updated times
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

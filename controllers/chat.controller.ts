@@ -3,43 +3,56 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Create or get chat
-async function createOrGetChat(req: Request, res: Response): Promise<void> {
-  const { user, receiver } = req.body;
-  if (!user || !receiver) {
-    res.status(400).json({ error: "user and receiver required" });
+/**
+ * Create or get chat between two users
+ */
+export async function createOrGetChat(
+  req: Request,
+  res: Response
+): Promise<void> {
+  const { user1Id, user2Id } = req.body;
+
+  if (!user1Id || !user2Id) {
+    res.status(400).json({ error: "user1Id and user2Id are required" });
     return;
   }
 
   try {
+    // Check if chat already exists (user1Id-user2Id pair in either order)
     let chat = await prisma.chat.findFirst({
       where: {
         OR: [
-          { user, receiver },
-          { user: receiver, receiver: user },
+          { user1Id, user2Id },
+          { user1Id: user2Id, user2Id: user1Id },
         ],
       },
       include: { messages: true },
     });
 
+    // If no chat exists, create a new one
     if (!chat) {
       chat = await prisma.chat.create({
-        data: { user, receiver },
+        data: { user1Id, user2Id },
         include: { messages: true },
       });
     }
 
     res.json(chat);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to create or fetch chat" });
   }
 }
-async function sendMessage(req: Request, res: Response): Promise<void> {
-  const { chatId } = req.params;
-  const { userId, message } = req.body;
 
-  if (!userId || !message) {
-    res.status(400).json({ error: "userId and message required" });
+/**
+ * Send a message in a chat
+ */
+export async function sendMessage(req: Request, res: Response): Promise<void> {
+  const { chatId } = req.params;
+  const { senderId, message } = req.body;
+
+  if (!senderId || !message) {
+    res.status(400).json({ error: "senderId and message are required" });
     return;
   }
 
@@ -51,30 +64,35 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
     }
 
     const newMessage = await prisma.message.create({
-      data: { chatId: String(chatId), userId, message },
+      data: {
+        chatId,
+        senderId,
+        message,
+      },
     });
 
     res.json(newMessage);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to send message" });
   }
 }
-async function getMessages(req: Request, res: Response): Promise<void> {
+
+/**
+ * Get all messages of a chat
+ */
+export async function getMessages(req: Request, res: Response): Promise<void> {
   const { chatId } = req.params;
 
   try {
     const messages = await prisma.message.findMany({
-      where: { chatId: String(chatId) },
+      where: { chatId },
+      orderBy: { id: "asc" }, // optional: oldest first
     });
+
     res.json(messages);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to fetch messages" });
   }
 }
-export { createOrGetChat };
-
-// Send a message
-export { sendMessage };
-
-// Get messages of a chat
-export { getMessages };

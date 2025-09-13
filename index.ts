@@ -12,9 +12,9 @@ dotenv.config();
 import userRouter from "./routes/user.routes.ts";
 import eqRouter from "./routes/eq.routes.ts";
 import noteRouter from "./routes/note.routes.ts";
+import chatRouter from "./routes/chat.routes.ts";
 
 import { getHighEQUsers } from "./controllers/getHighEQUsers.ts";
-import { createOrGetChat } from "./controllers/chat.controller.ts";
 
 // Initializing Server -------------------------------------------------------------------------------------------
 
@@ -78,10 +78,10 @@ app.use("/api/v1/eq", eqRouter);
 app.use("/api/v1/note", noteRouter);
 
 //EQ high level route
-app.get("/api/users/high-eq", getHighEQUsers);
+app.get("/api/v1/users/high-eq", getHighEQUsers);
 
 // EQ Routes
-app.post("/api/abc/chat", createOrGetChat);
+app.use("/api/v1/chat", chatRouter);
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 

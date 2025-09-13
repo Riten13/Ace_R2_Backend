@@ -108,15 +108,16 @@ model Activity {
 
 model Chat {
   id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  user     String
-  receiver String
-  messages Message[]
+  user1Id  String    @db.ObjectId
+  user2Id  String    @db.ObjectId
+  messages Message[] // one-to-many relation
 }
 
 model Message {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  chatId  String
-  userId  String
-  message String
-  chat    Chat   @relation(fields: [chatId], references: [id])
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  chatId   String @db.ObjectId
+  senderId String @db.ObjectId
+  message  String
+
+  chat Chat @relation(fields: [chatId], references: [id])
 }
